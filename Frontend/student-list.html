@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student List</title>
+    <title>Student table</title>
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 <body>
-        <!-- Navigation Bar -->
+
+    <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Student Records</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,11 +17,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item ">
+                <li class="nav-item">
                     <a class="nav-link" href="index.html">Home</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="student-list.html">Student List</a>
+                <li class="nav-item">
+                    <a class="nav-link active" href="student-list.html">Student List</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="add-edit-student.html">Add Student</a>
@@ -29,57 +31,129 @@
     </nav>
 
     <div class="container mt-4">
+        
+
+        <!-- Display the submitted data in a table -->
         <h1><b>Student List</b></h1>
-        <table class="table mt-3">
+        <nav class="navbar navbar-light bg-light justify-content-end">
+            <form class="form-inline">
+              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+          </nav>
+        <table class="table mt-3 text-center">
             <thead>
                 <tr>
-                    <th>SID</th>
+                    <th>ID</th>
                     <th>FirstName</th>
                     <th>LastName</th>
                     <th>Email</th>
-                    <th>NearCity</th>
+                    <th>Near City</th>
                     <th>Course</th>
                     <th>Guardian</th>
                     <th>Subjects</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="studentTableBody">
                 <!-- Student data will be inserted here dynamically -->
+                <tr>
+                    <td>1</td>
+                    <td>John</td>
+                    <td>Doe</td>
+                    <td>john@example.com</td>
+                    <td>New York</td>
+                    <td>Degree</td>
+                    <td>Jane Doe</td>
+                    <td>Math, Physics</td>
+                    <td>
+                        <button class='btn btn-info btn-sm'>View</button>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
-</body>
 
+    <!-- Bootstrap JS and jQuery (make sure to include them at the end of the body) -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
+    <script>
+        // Handle form submission using jQuery
+        $(document).ready(function () {
+            $("#studentForm").submit(function (event) {
+                event.preventDefault();
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-    // Fetch student data using Ajax
-    $(document).ready(function () {
-        $.ajax({
-            url: "/api/students", // Replace with your actual API endpoint
-            method: "GET",
-            dataType: "json",
-            success: function (data) {
-                // Clear existing rows
-                $("#studentTableBody").empty();
+                // Get form data
+                var formData = {
+                    "SID": $("#SID").val(),
+                    "FirstName": $("#FirstName").val(),
+                    "LastName": $("#LastName").val(),
+                    "Email": $("#Email").val(),
+                    "NearCity": $("#NearCity").val(),
+                    "Course": $("#Course").val(),
+                    "Guardian": $("#Guardian").val(),
+                    "Subjects": $("input[name='Subjects']:checked").map(function () {
+                        return $(this).val();
+                    }).get().join(", ")
+                };
 
-                // Populate table with fetched student data
-                data.forEach(function (student) {
-                    var row = "<tr>" +
-                        "<td>" + student.SID + "</td>" +
-                        "<td>" + student.FirstName + " " + student.LastName + "</td>" +
-                        "<td>" + student.Email + "</td>" +
-                        "<td><button class='btn btn-info btn-sm'>View</button></td>" +
-                        "</tr>";
-                    $("#studentTableBody").append(row);
-                });
-            },
-            error: function (error) {
-                console.log("Error fetching student data:", error);
-            }
+                // Append data to the table
+                var row = "<tr>" +
+                    "<td>" + formData.SID + "</td>" +
+                    "<td>" + formData.FirstName + "</td>" +
+                    "<td>" + formData.LastName + "</td>" +
+                    "<td>" + formData.Email + "</td>" +
+                    "<td>" + formData.NearCity + "</td>" +
+                    "<td>" + formData.Course + "</td>" +
+                    "<td>" + formData.Guardian + "</td>" +
+                    "<td>" + formData.Subjects + "</td>" +
+                    "</tr>";
+
+                $("#studentTableBody").append(row);
+
+                // Clear the form
+                $("#studentForm")[0].reset();
+            });
         });
-    });
-</script>
-</html>
+    </script>
+    <script>
+        // Fetch student data using Ajax
+        $(document).ready(function () {
+            function fetchStudentList() {
+                $.ajax({
+                    url: "/api/student-list", // Replace with your actual API endpoint
+                    method: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        // Clear existing rows
+                        $("#studentTableBody").empty();
 
+                        // Populate table with fetched student data
+                        data.forEach(function (student) {
+                            var row = "<tr>" +
+                                "<td>" + formData.SID + "</td>" +
+                    "<td>" + formData.FirstName + "</td>" +
+                    "<td>" + formData.LastName + "</td>" +
+                    "<td>" + formData.Email + "</td>" +
+                    "<td>" + formData.NearCity + "</td>" +
+                    "<td>" + formData.Course + "</td>" +
+                    "<td>" + formData.Guardian + "</td>" +
+                    "<td>" + formData.Subjects + "</td>" +
+                    "</tr>";
+                            $("#studentTableBody").append(row);
+                        });
+                    },
+                    error: function (error) {
+                        console.log("Error fetching student data:", error);
+                    }
+                });
+            }
+
+            // Fetch student list on page load
+            fetchStudentList();
+        });
+    </script>
+</body>
+</html>
