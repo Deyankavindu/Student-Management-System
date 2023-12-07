@@ -45,5 +45,71 @@ app.post('/insert', async (req, res) => {
     }
 });
 
+app.get('/students', async (req, res) => {
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+    try {
+        await client.connect();
+        const database = client.db("StudentDB");
+        const collection = database.collection("students");
+
+        const students = await collection.find().toArray();
+        res.status(200).json(students);
+    } catch (error) {
+        res.status(500).json({ message: 'Error occurred while retrieving data', error: error.toString() });
+    } finally {
+        await client.close();
+    }
+});
+
+app.get('/students/:name', async (req, res) => {
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+    try {
+        await client.connect();
+        const database = client.db("StudentDB");
+        const collection = database.collection("students");
+
+        const student = await collection.findOne({ FirstName: req.params.name });
+        if (student) {
+            res.status(200).json(student);
+        } else {
+            res.status(404).json({ message: 'Student not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error occurred while retrieving data', error: error.toString() });
+    } finally {
+        await client.close();
+    }
+});
+
+app.get('/search', async (req, res) => {
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+    try {
+        await client.connect();
+        const database = client.db("StudentDB");
+        const collection = database.collection("students");
+
+        // Extract the category and search term from the query parameter
+        const category = req.query.category;
+        const searchTerm = req.query.searchTerm;
+
+        // Create a search query
+        let query = {};
+        query[category] = searchTerm;
+
+        // Find the matching students in the database
+        const students = await collection.find(query).toArray();
+
+        // Send the found students back as the response
+        res.status(200).json(students);
+    } catch (error) {
+        res.status(500).json({ message: 'Error occurred while retrieving data', error: error.toString() });
+    } finally {
+        await client.close();
+    }
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server is running on port ${port}`));

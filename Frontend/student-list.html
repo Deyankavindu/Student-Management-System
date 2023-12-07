@@ -9,152 +9,129 @@
 </head>
 <body>
 
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Student Records</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse ml-3" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="student-list.html">Student List</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="add-edit-student.html">Add Student</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="container mt-4">
-        
-
-        <!-- Display the submitted data in a table -->
-        <h1><b>Student List</b></h1>
-                   <!-- Search Bar -->
-        <nav class="navbar navbar-light bg-light justify-content-end">
-            <form class="form-inline">
-              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-          </nav>
-        <table class="table mt-3 text-center">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>FirstName</th>
-                    <th>LastName</th>
-                    <th>Email</th>
-                    <th>Near City</th>
-                    <th>Course</th>
-                    <th>Guardian</th>
-                    <th>Subjects</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="studentTableBody">
-                <!-- Student data will be inserted here dynamically -->
-                <tr>
-                    <td>1</td>
-                    <td>John</td>
-                    <td>Doe</td>
-                    <td>john@example.com</td>
-                    <td>New York</td>
-                    <td>Degree</td>
-                    <td>Jane Doe</td>
-                    <td>Math, Physics</td>
-                    <td>
-                        <button class='btn btn-info btn-sm'>View</button>
-                        <button class='btn btn-danger btn-sm'>Delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Student Records</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse ml-3" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="student-list.html">Student List</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="add-edit-student.html">Add Student</a>
+            </li>
+        </ul>
     </div>
+</nav>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<div class="container mt-4">
 
-    <script>
-        // Handle form submission using jQuery
-        $(document).ready(function () {
-            $("#studentForm").submit(function (event) {
-                event.preventDefault();
+    <!-- Display the submitted data in a table -->
+    <h1><b>Student List</b></h1>
+    <!-- Search Bar -->
+    <nav class="navbar navbar-light bg-light justify-content-end">
+        <form class="form-inline">
+            <div class="mx-2"><select class="form-control " id="searchCategory">
+                <option value="SID">Student ID</option>
+                <option value="FirstName">First Name</option>
+                <option value="LastName">Last Name</option>
+                <option value="Email">Email</option>
+                <option value="NearCity">Near City</option>
+                <option value="Course">Course</option>
+                <option value="Guardian">Guardian</option>
+            </select></div>
+            <input class="form-control mr-sm-2" id="searchTerm" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" id="searchButton" type="button">Search</button>
+        </form>
+    </nav>
+    <table class="table mt-3 text-center">
+        <tbody id="studentTableBody">
+        <!-- Student data will be inserted here dynamically -->
+        </tbody>
+    </table>
+</div>
 
-                // Get form data
-                var formData = {
-                    "SID": $("#SID").val(),
-                    "FirstName": $("#FirstName").val(),
-                    "LastName": $("#LastName").val(),
-                    "Email": $("#Email").val(),
-                    "NearCity": $("#NearCity").val(),
-                    "Course": $("#Course").val(),
-                    "Guardian": $("#Guardian").val(),
-                    "Subjects": $("input[name='Subjects']:checked").map(function () {
-                        return $(this).val();
-                    }).get().join(", ")
-                };
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-                // Append data to the table
-                var row = "<tr>" +
-                    "<td>" + formData.SID + "</td>" +
-                    "<td>" + formData.FirstName + "</td>" +
-                    "<td>" + formData.LastName + "</td>" +
-                    "<td>" + formData.Email + "</td>" +
-                    "<td>" + formData.NearCity + "</td>" +
-                    "<td>" + formData.Course + "</td>" +
-                    "<td>" + formData.Guardian + "</td>" +
-                    "<td>" + formData.Subjects + "</td>" +
-                    "</tr>";
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    // Send a GET request to the server
+    $.ajax({
+        url: 'http://localhost:3000/students',
+        type: 'GET',
+        success: function(data) {
+            // Create a table
+            const table = $('<table>').addClass('table');
 
-                $("#studentTableBody").append(row);
-
-                // Clear the form
-                $("#studentForm")[0].reset();
-            });
-        });
-    </script>
-    <script>
-        // Fetch student data using Ajax
-        $(document).ready(function () {
-            function fetchStudentList() {
-                $.ajax({
-                    url: "/api/student-list", // Replace with your actual API endpoint
-                    method: "GET",
-                    dataType: "json",
-                    success: function (data) {
-                        // Clear existing rows
-                        $("#studentTableBody").empty();
-
-                        // Populate table with fetched student data
-                        data.forEach(function (student) {
-                            var row = "<tr>" +
-                                "<td>" + formData.SID + "</td>" +
-                    "<td>" + formData.FirstName + "</td>" +
-                    "<td>" + formData.LastName + "</td>" +
-                    "<td>" + formData.Email + "</td>" +
-                    "<td>" + formData.NearCity + "</td>" +
-                    "<td>" + formData.Course + "</td>" +
-                    "<td>" + formData.Guardian + "</td>" +
-                    "<td>" + formData.Subjects + "</td>" +
-                    "</tr>";
-                            $("#studentTableBody").append(row);
-                        });
-                    },
-                    error: function (error) {
-                        console.log("Error fetching student data:", error);
-                    }
+            // Create table body
+            const tbody = $('<tbody>');
+            $.each(data, function(index, student) {
+                const row = $('<tr>');
+                $.each(student, function(key, value) {
+                    const td = $('<td>').text(value);
+                    row.append(td);
                 });
-            }
+                tbody.append(row);
+            });
+            table.append(tbody);
 
-            // Fetch student list on page load
-            fetchStudentList();
+            // Append the table to the designated tbody element in the HTML document
+            $('#studentTableBody').append(table);
+        },
+        error: function(error) {
+            console.error('Error:', error);
+        }
+    });
+
+    function searchWithSelectedCategoryAndString() {
+        // Get the selected category and search term
+        const category = $('#searchCategory').val();
+        const searchTerm = $('#searchTerm').val();
+
+        // Send a GET request to the server
+        $.ajax({
+            url: `http://localhost:3000/search?category=${category}&searchTerm=${searchTerm}`,
+            type: 'GET',
+            success: function(data) {
+                // Clear the current table data
+                $('#studentTableBody').empty();
+
+                // Create a table
+                const table = $('<table>').addClass('table');
+
+                // Create table body
+                const tbody = $('<tbody>');
+                $.each(data, function(index, student) {
+                    const row = $('<tr>');
+                    $.each(student, function(key, value) {
+                        const td = $('<td>').text(value);
+                        row.append(td);
+                    });
+                    tbody.append(row);
+                });
+                table.append(tbody);
+
+                // Append the table to the designated tbody element in the HTML document
+                $('#studentTableBody').append(table);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
         });
-    </script>
+    }
+
+    $('#searchButton').on('click', function(e) {
+        e.preventDefault(); // Prevent the form from being submitted
+        searchWithSelectedCategoryAndString();
+    });
+
+</script>
 </body>
 </html>
