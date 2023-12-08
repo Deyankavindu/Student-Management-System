@@ -62,7 +62,32 @@ app.get('/students', async (req, res) => {
     }
 });
 
+app.get('/students/:id', async (req, res) => {
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
+    try {
+        await client.connect();
+        const database = client.db("StudentDB");
+        const collection = database.collection("students");
+
+        // Convert the id from string to ObjectId
+        const ObjectId = require('mongodb').ObjectId;
+        const id = new ObjectId(req.params.id);
+
+        // Find the student
+        const student = await collection.findOne({ _id: id });
+
+        if (student) {
+            res.status(200).json(student);
+        } else {
+            res.status(404).json({ message: 'Student not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error occurred while retrieving student', error: error.toString() });
+    } finally {
+        await client.close();
+    }
+});
 
 app.get('/search', async (req, res) => {
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });

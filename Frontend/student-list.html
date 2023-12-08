@@ -103,6 +103,7 @@
                 const actionTd = $('<td>');
                 const updateIcon = $('<i>').addClass('bi bi-pencil-square');
                 const updateButton = $('<button>').addClass('btn btn-primary').append(updateIcon);
+                updateButton.data('id', student._id);
 
                 const deleteIcon = $('<i>').addClass('bi bi-trash');
                 const deleteButton = $('<button>').addClass('btn btn-danger').append(deleteIcon);
@@ -180,6 +181,11 @@
         deleteStudentById(studentId);
     });
 
+    //update button
+    $('#studentTableBody').on('click', '.btn-primary', function() {
+        const studentId = $(this).data('id'); // Retrieve the student's id
+        window.location.href = 'edit.html?id=' + studentId;
+    });
 
     $('#searchButton').on('click', function(e) {
         e.preventDefault(); // Prevent the form from being submitted

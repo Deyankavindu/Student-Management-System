@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Add Student</title>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<a class="navbar-brand" href="#">Student Records</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarNav">
+		<ul class="navbar-nav">
+			<li class="nav-item active">
+				<a class="nav-link" href="index.html">Home</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="student-list.html">Student List</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="add-edit-student.html">Add Student</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+<div class="container mt-4">
+	<h1>
+		<b>Add Student</b>
+	</h1>
+	<form class="mt-4" id="studentForm">
+		<div class="form-group" hidden="hidden">
+			<label for="sid">Student ID:</label>
+			<input type="text" class="form-control" id="sid" name="sid" >
+		</div>
+		<div class="form-group">
+			<label for="fName">First Name:</label>
+			<input type="text" class="form-control" id="fName" name="fName" required>
+		</div>
+		<div class="form-group">
+			<label for="lName">Last Name:</label>
+			<input type="text" class="form-control" id="lName" name="lName" required>
+		</div>
+		<div class="form-group">
+			<label for="email">Email:</label>
+			<input type="email" class="form-control" id="email" name="email" required>
+		</div>
+		<div class="form-group">
+			<label for="city">Near City:</label>
+			<input type="text" class="form-control" id="city" name="city" required>
+		</div>
+		<div>
+			<label for="course">Course:</label>
+			<select class="custom-select" id="course" name="course">
+				<option selected>Select Course</option>
+				<option value="Foundation">Foundation</option>
+				<option value="HND">HND</option>
+				<option value="Degree">Degree</option>
+			</select>
+		</div>
+		<br>
+		<div class="form-group">
+			<label for="guardian">Guardian:</label>
+			<input type="text" class="form-control" id="guardian" name="guardian" required>
+		</div>
+		<div>
+			<label >Subjects:</label>
+			<div class="custom-control custom-checkbox">
+				<input type="checkbox" class="custom-control-input" id="customCheck1">
+				<label class="custom-control-label" for="customCheck1">ETF</label>
+			</div>
+			<div class="custom-control custom-checkbox">
+				<input type="checkbox" class="custom-control-input" id="customCheck2">
+				<label class="custom-control-label" for="customCheck2">ORDBMS</label>
+			</div>
+			<div class="custom-control custom-checkbox">
+				<input type="checkbox" class="custom-control-input" id="customCheck3">
+				<label class="custom-control-label" for="customCheck3">OOP</label>
+			</div>
+			<div class="custom-control custom-checkbox">
+				<input type="checkbox" class="custom-control-input" id="customCheck4">
+				<label class="custom-control-label" for="customCheck4">SE</label>
+			</div>
+			<div class="custom-control custom-checkbox">
+				<input type="checkbox" class="custom-control-input" id="customCheck5">
+				<label class="custom-control-label" for="customCheck5">HCI</label>
+			</div>
+			<div class="custom-control custom-checkbox">
+				<input type="checkbox" class="custom-control-input" id="customCheck6">
+				<label class="custom-control-label" for="customCheck6">IP</label>
+			</div>
+		</div>
+		<br>
+		<button type="submit" class="btn btn-primary mb-5 mt-2">Submit</button>
+	</form>
+</div>
+<!-- Bootstrap JS and jQuery (make sure to include them at the end of the body) -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Extract the id from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+
+        // Send a GET request to the server to retrieve the student data
+        $.ajax({
+            url: 'http://localhost:3000/students/' + id,
+            type: 'GET',
+            success: function(student) {
+                // Populate the form fields with the retrieved data
+                $('#sid').val(student.SID);
+                $('#fName').val(student.FirstName);
+                $('#lName').val(student.LastName);
+                $('#email').val(student.Email);
+                $('#city').val(student.NearCity);
+                $('#course').val(student.Course);
+                $('#guardian').val(student.Guardian);
+
+                // Check the checkboxes for the student's subjects
+                student.Subjects.forEach(subject => {
+                    $(`input[type=checkbox][value=${subject}]`).prop('checked', true);
+                });
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+</script>
+</body>
+</html>
