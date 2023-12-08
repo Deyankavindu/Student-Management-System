@@ -62,26 +62,7 @@ app.get('/students', async (req, res) => {
     }
 });
 
-app.get('/students/:name', async (req, res) => {
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-    try {
-        await client.connect();
-        const database = client.db("StudentDB");
-        const collection = database.collection("students");
-
-        const student = await collection.findOne({ FirstName: req.params.name });
-        if (student) {
-            res.status(200).json(student);
-        } else {
-            res.status(404).json({ message: 'Student not found' });
-        }
-    } catch (error) {
-        res.status(500).json({ message: 'Error occurred while retrieving data', error: error.toString() });
-    } finally {
-        await client.close();
-    }
-});
 
 app.get('/search', async (req, res) => {
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -110,6 +91,34 @@ app.get('/search', async (req, res) => {
         await client.close();
     }
 });
+
+app.delete('/students/:id', async (req, res) => {
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+    try {
+        await client.connect();
+        const database = client.db("StudentDB");
+        const collection = database.collection("students");
+
+        // Convert the id from string to ObjectId
+        const ObjectId = require('mongodb').ObjectId;
+        const id = new ObjectId(req.params.id);
+
+        // Delete the student
+        const result = await collection.deleteOne({ _id: id });
+
+        if (result.deletedCount === 1) {
+            res.status(200).json({ message: 'Student deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'Student not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error occurred while deleting student', error: error.toString() });
+    } finally {
+        await client.close();
+    }
+});
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server is running on port ${port}`));
