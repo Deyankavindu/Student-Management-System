@@ -131,6 +131,8 @@
                 data: JSON.stringify(studentData),
                 success: function(response) {
                     alert(response.message);
+                // Reload page after successful addition
+                window.location.reload();
                 },
                 error: function(error) {
                     alert('Error: ' + error);
