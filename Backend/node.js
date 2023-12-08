@@ -144,6 +144,33 @@ app.delete('/students/:id', async (req, res) => {
     }
 });
 
+app.put('/students/:id', async (req, res) => {
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+    try {
+        await client.connect();
+        const database = client.db("StudentDB");
+        const collection = database.collection("students");
+
+        // Convert the id from string to ObjectId
+        const ObjectId = require('mongodb').ObjectId;
+        const id = new ObjectId(req.params.id);
+
+        // Update the student
+        const result = await collection.updateOne({ _id: id }, { $set: req.body });
+
+        if (result.modifiedCount === 1) {
+            res.status(200).json({ message: 'Student updated successfully' });
+        } else {
+            res.status(404).json({ message: 'Student not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error occurred while updating student', error: error.toString() });
+    } finally {
+        await client.close();
+    }
+});
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server is running on port ${port}`));

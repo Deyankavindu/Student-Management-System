@@ -133,6 +133,47 @@
                 console.error('Error:', error);
             }
         });
+
+        $('#studentForm').on('submit', function(e) {
+            e.preventDefault();
+
+            // Extract the id from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            let studentData = {
+                SID: $('#sid').val(),
+                FirstName: $('#fName').val(),
+                LastName: $('#lName').val(),
+                Email: $('#email').val(),
+                NearCity: $('#city').val(),
+                Course: $('#course').val(),
+                Guardian: $('#guardian').val(),
+                Subjects: []
+            };
+
+            // Get all subjects
+            $('input[type=checkbox]').each(function() {
+                if ($(this).prop('checked')) {
+                    studentData.Subjects.push($(this).next('label').text());
+                }
+            });
+
+            $.ajax({
+                url: 'http://localhost:3000/students/' + id,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(studentData),
+                success: function(response) {
+                    alert(response.message);
+                },
+                error: function(error) {
+                    alert('Error: ' + error);
+                }
+            });
+        });
+
+
     });
 </script>
 </body>
