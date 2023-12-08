@@ -1,7 +1,9 @@
 body{
-   /*background-image:url(img/students-knowing-right-answer.jpg) ;*/
- 
-}
+   background-image:url(img/bg1.jpg) ;
+   background-image:url(img/bg2.jpg) ;
+   background-image:url(img/bg3.jpg) ;
+
+ }
 
 .jumbotron{
     opacity: 0.9;
@@ -14,3 +16,5 @@ a{
     padding: 0;
     margin-bottom: 0;
 }
+
+
