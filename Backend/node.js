@@ -101,7 +101,8 @@ app.delete('/students/:id', async (req, res) => {
         const collection = database.collection("students");
 
         // Convert the id from string to ObjectId
-        const id = new require('mongodb').ObjectId(req.params.id);
+        const ObjectId = require('mongodb').ObjectId;
+        const id = new ObjectId(req.params.id);
 
         // Delete the student
         const result = await collection.deleteOne({ _id: id });
